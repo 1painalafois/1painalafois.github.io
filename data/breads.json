@@ -11,7 +11,7 @@
       "category": "Tradicional Venezolana",
       "summary": "Espirales dulces con papelón y queso.",
       "tags": ["dulce", "papelón", "queso"],
-      "md": "./content/recipes/golfeados.md",
+      "md": "content/recipes/golfeados.md",
       "source": "Archivo familiar"
     },
     {
@@ -20,7 +20,7 @@
       "category": "Panadería Salada",
       "summary": "Miga abierta y corteza crujiente.",
       "tags": ["hogaza", "masa madre"],
-      "md": "./content/recipes/hogaza-campesina.md"
+      "md": "content/recipes/hogaza-campesina.md"
     },
     {
       "name": "Pan de Jamón",
@@ -28,7 +28,7 @@
       "category": "Tradicional Venezolana",
       "summary": "Clásico decembrino con jamón, tocineta, pasas y aceitunas.",
       "tags": ["fiesta", "relleno"],
-      "md": "./content/recipes/pan-de-jamon.md"
+      "md": "content/recipes/pan-de-jamon.md"
     }
   ],
   "tips": [
