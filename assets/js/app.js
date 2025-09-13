@@ -241,13 +241,15 @@ createRouter([
 // Búsqueda
 const form = document.getElementById('searchForm');
 const input = document.getElementById('searchInput');
+
 form?.addEventListener('submit', (e)=>{
   e.preventDefault();
   const q = (input?.value || '').trim();
   if (!q) return;
-  SearchView(q);
+  SearchView(q);     // pinta resultados en #app
   input.value = '';
 });
+
 
 // nav activo
 function updateActiveNav() {
