@@ -1,8 +1,8 @@
 {
   "categories": [
     { "name": "Panadería Dulce", "slug": "panaderia-dulce", "description": "Bollería y panes con azúcar, rellenos y glaseados." },
-    { "name": "Panadería Salada", "slug": "panaderia-salada", "description": "Hogazas, panes de mesa y masas saladas." },
-    { "name": "Tradicional Venezolana", "slug": "tradicional-venezolana", "description": "Sabores de casa: golfeados, pan de jamón, catalinas." }
+    { "name": "Panadería Salada", "slug": "panaderia-salada", "description": "Hogazas, panes de mesa y masas saladas.", "featured": true  },
+    { "name": "Tradicional Venezolana", "slug": "tradicional-venezolana", "description": "Sabores de casa: golfeados, pan de jamón, catalinas.", "featured": true  }
   ],
   "breads": [
     {

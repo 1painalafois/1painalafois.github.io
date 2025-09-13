@@ -19,39 +19,55 @@ const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 
 async function HomeView() {
   const db = await loadDB();
+
+  // 1) Construir categorías con conteo
   const cats = db.categories.map(c => ({
     ...c,
     count: db.breads.filter(b => b.category === c.name).length
   }));
+
+  // 2) Seleccionar solo las "featured"
+  let featuredCats = cats.filter(c => c.featured);
+
+  // 3) Ordenar por número de panes (descendente)
+  featuredCats.sort((a, b) => b.count - a.count);
+
+  // 4) Render de la cabecera/hero
   $app.innerHTML = `
     <section class="hero">
       <div class="card">
         <div class="kicker">Hornear en casa</div>
         <h1 class="display">Recetas y consejos de panadería casera</h1>
-        <p class="subtitle">Explora panes por categoría y disfruta el proceso uno a la vez.</p>
+        <p class="subtitle">Explora panes por categoría, aprende técnicas y disfruta el proceso uno a la vez.</p>
         <div style="display:flex; gap:.6rem; margin-top:.8rem">
-          <a class="btn btn-primary" href="#/categorias">Ver categorías</a>
+          <a class="btn btn-primary" href="#/categorias">Ver todas las categorías</a>
           <a class="btn btn-outline" href="#/consejos">Consejos</a>
         </div>
       </div>
       <div class="card">
-        ${ui.Notice("Las recetas se cargan desde <code>content/recipes/*.md</code>")}
+        ${ui.Notice("Las recetas se cargan desde <code>content/recipes/*.md</code> e indexadas por <code>data/breads.json</code>.")}
       </div>
     </section>
-
-    ${ui.Section("Categorías destacadas",
-      `<div class="grid">
-        ${cats.slice(0,6).map(ui.CategoryCard).join('')}
-      </div>`
-    )}
-
-    ${ui.Section("Últimos panes añadidos",
-      `<div class="grid">
-        ${db.breads.slice(-8).reverse().map(ui.BreadCard).join('')}
-      </div>`
-    )}
   `;
-}
+
+  // 5) Bloque de categorías destacadas (solo featured)
+  $app.innerHTML += ui.Section("Categorías destacadas",
+    `<div class="grid">
+      ${featuredCats.map(ui.CategoryCard).join('')}
+    </div>`
+  );
+
+  // 6) Últimos panes añadidos (filtrados solo a categorías featured)
+  const featuredCategoryNames = new Set(featuredCats.map(c => c.name));
+  const latestFeatured = db.breads
+    .filter(b => featuredCategoryNames.has(b.category))
+    .slice(-8)          // últimos 8
+    .reverse();         // recientes primero
+
+  await hydrateCovers(latestFeatured, 8); // mantiene portadas y limita fetch
+
+  $app
+
 
 async function CategoriesView() {
   const db = await loadDB();
