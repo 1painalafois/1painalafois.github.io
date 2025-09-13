@@ -1,20 +1,8 @@
 {
   "categories": [
-    {
-      "name": "Panadería Dulce",
-      "slug": "panaderia-dulce",
-      "description": "Bollería y panes con azúcar, rellenos y glaseados."
-    },
-    {
-      "name": "Panadería Salada",
-      "slug": "panaderia-salada",
-      "description": "Hogazas, panes de mesa y masas saladas."
-    },
-    {
-      "name": "Tradicional Venezolana",
-      "slug": "tradicional-venezolana",
-      "description": "Sabores de casa: golfeados, pan de jamón, catalinas."
-    }
+    { "name": "Panadería Dulce", "slug": "panaderia-dulce", "description": "Bollería y panes con azúcar, rellenos y glaseados." },
+    { "name": "Panadería Salada", "slug": "panaderia-salada", "description": "Hogazas, panes de mesa y masas saladas." },
+    { "name": "Tradicional Venezolana", "slug": "tradicional-venezolana", "description": "Sabores de casa: golfeados, pan de jamón, catalinas." }
   ],
   "breads": [
     {
@@ -23,26 +11,7 @@
       "category": "Tradicional Venezolana",
       "summary": "Espirales dulces con papelón y queso.",
       "tags": ["dulce", "papelón", "queso"],
-      "ingredients": [
-        "500 g harina panadera",
-        "250 ml leche tibia",
-        "8 g levadura seca",
-        "60 g azúcar",
-        "1 huevo",
-        "60 g mantequilla",
-        "Relleno: papelón rallado + queso blanco"
-      ],
-      "steps": [
-        "Hidrata la levadura en la leche con una parte del azúcar.",
-        "Mezcla con harina, huevo, mantequilla y azúcar restante. Amasa.",
-        "Leva hasta duplicar. Estira, rellena con papelón y queso, enrolla.",
-        "Corta, coloca en bandeja, fermenta y hornea a 180°C 20–25 min."
-      ],
-      "tips": [
-        "Pincela con melado al salir del horno para brillo.",
-        "Usa queso semiduro para contraste salado-dulce."
-      ],
-      "note": "Puedes ajustar el dulzor con más o menos papelón.",
+      "md": "./content/recipes/golfeados.md",
       "source": "Archivo familiar"
     },
     {
@@ -51,18 +20,7 @@
       "category": "Panadería Salada",
       "summary": "Miga abierta y corteza crujiente.",
       "tags": ["hogaza", "masa madre"],
-      "ingredients": [
-        "750 g harina panadera",
-        "525 g agua",
-        "150 g masa madre activa",
-        "18 g sal"
-      ],
-      "steps": [
-        "Autólisis 30 min. Agrega masa madre y mezcla.",
-        "Añade sal y haz pliegues cada 30 min (3–4 veces).",
-        "Preformado, reposo, formado y frío 12–16 h.",
-        "Horneo en olla: 20 min tapado a 250°C + 20 min destapado a 230°C."
-      ]
+      "md": "./content/recipes/hogaza-campesina.md"
     },
     {
       "name": "Pan de Jamón",
@@ -70,21 +28,7 @@
       "category": "Tradicional Venezolana",
       "summary": "Clásico decembrino con jamón, tocineta, pasas y aceitunas.",
       "tags": ["fiesta", "relleno"],
-      "ingredients": [
-        "500 g harina",
-        "250 ml leche",
-        "7 g levadura",
-        "60 g azúcar",
-        "1 huevo",
-        "50 g mantequilla",
-        "Relleno: jamón, tocineta, pasas, aceitunas"
-      ],
-      "steps": [
-        "Amasa y primera fermentación.",
-        "Estira, rellena y enrolla.",
-        "Fermenta 45–60 min.",
-        "Hornear 180°C 30–35 min."
-      ]
+      "md": "./content/recipes/pan-de-jamon.md"
     }
   ],
   "tips": [

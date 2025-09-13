@@ -1,5 +1,3 @@
-// funciones de UI puras y reusables
-
 export const Components = {
   CategoryCard: (cat) => `
     <article class="card">
@@ -11,7 +9,6 @@ export const Components = {
       </div>
     </article>
   `,
-
   BreadCard: (bread) => `
     <article class="card">
       <div class="card-media" role="img" aria-label="${bread.name}"></div>
@@ -22,10 +19,7 @@ export const Components = {
       </div>
     </article>
   `,
-
   Notice: (html) => `<div class="notice">${html}</div>`,
-
-  // Pequeñas secciones
   Section: (title, content) => `
     <section class="section">
       <h3>${title}</h3>
