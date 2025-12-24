@@ -3,10 +3,10 @@
 Miga abierta y corteza crujiente.
 
 ## Ingredientes
-- 750 g harina panadera  
-- 525 g agua  
-- 150 g masa madre activa  
-- 18 g sal
+- 750 gramos harina panadera 
+- 525 gramos agua  
+- 150 gramos masa madre activa  
+- 18 gramos sal
 
 ## Método
 1. Autólisis **30 min**.  
