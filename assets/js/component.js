@@ -17,20 +17,16 @@ async function loadDB() {
 const bySlug = (arr, slug) => arr.find(i => i.slug === slug);
 const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 
+// --------------------- HOME ---------------------
 async function HomeView() {
   const db = await loadDB();
 
-  // Categorías con conteo
-  const cats = db.categories.map(c => ({
-    ...c,
-    count: db.breads.filter(b => b.category === c.name).length
-  }));
-
   // Categorías destacadas
-  let featuredCats = cats.filter(c => c.featured);
-  featuredCats.sort((a, b) => b.count - a.count);
+  const featuredCats = db.categories.filter(c => c.featured);
 
-  // Render cabecera
+  // Últimas 3 recetas
+  const latestBreads = db.breads.slice(-3).reverse();
+
   $app.innerHTML = `
     <section class="hero">
       <div class="card">
@@ -46,23 +42,18 @@ async function HomeView() {
         ${ui.Notice("Las recetas se cargan desde <code>content/recipes/*.md</code> e indexadas por <code>data/breads.json</code>.")}
       </div>
     </section>
+
+    ${ui.Section("Categorías destacadas",
+      `<div class="grid">${featuredCats.map(ui.CategoryCard).join('')}</div>`
+    )}
+
+    ${ui.Section("Últimas recetas",
+      `<div class="grid">${latestBreads.map(ui.BreadCard).join('')}</div>`
+    )}
   `;
-
-  // Categorías destacadas
-  $app.innerHTML += ui.Section("Categorías destacadas",
-    `<div class="grid">${featuredCats.map(ui.CategoryCard).join('')}</div>`
-  );
-
-  // Últimas 3 recetas añadidas
-  const latestBreads = db.breads.slice(-3).reverse();
-  $app.innerHTML += ui.Section("Últimas recetas",
-    `<div class="grid">${latestBreads.map(ui.BreadCard).join('')}</div>`
-  );
-
-  // Hydrate covers para imágenes de estas recetas
-  await hydrateCovers(latestBreads, 3);
 }
 
+// --------------------- CATEGORÍAS ---------------------
 async function CategoriesView() {
   const db = await loadDB();
   const cats = db.categories.map(c => ({
@@ -90,6 +81,7 @@ async function CategoryView({ slug }) {
   `;
 }
 
+// --------------------- RECETA ---------------------
 async function BreadView({ slug }) {
   const db = await loadDB();
   const bread = bySlug(db.breads, slug);
@@ -142,7 +134,7 @@ async function BreadView({ slug }) {
     if (!res.ok) throw new Error(`No se pudo cargar ${bread.md}`);
     let raw = await res.text();
 
-    // Embed de videos
+    // Embed de videos simples (YouTube, Vimeo, MP4)
     raw = raw.replace(/^\s*(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_\-]+)[^\s]*)\s*$/gmi,
       (_, url, id) => `<div class="md-video"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen loading="lazy"></iframe></div>`);
     raw = raw.replace(/^\s*(https?:\/\/youtu\.be\/([A-Za-z0-9_\-]+)[^\s]*)\s*$/gmi,
@@ -175,6 +167,7 @@ async function BreadView({ slug }) {
   }
 }
 
+// --------------------- CONSEJOS ---------------------
 async function TipsView() {
   const db = await loadDB();
   const rows = db.tips?.length ? db.tips.map(t=>`
@@ -189,6 +182,7 @@ async function TipsView() {
   `;
 }
 
+// --------------------- ACERCA ---------------------
 function AboutView() {
   $app.innerHTML = `
     <h2>Acerca</h2>
@@ -196,6 +190,7 @@ function AboutView() {
   `;
 }
 
+// --------------------- BÚSQUEDA ---------------------
 async function SearchView(query) {
   const db = await loadDB();
   const q = normalize(query);
@@ -209,7 +204,7 @@ async function SearchView(query) {
   `;
 }
 
-// Router
+// --------------------- ROUTER ---------------------
 createRouter([
   { path:'/', onEnter: HomeView },
   { path:'/categorias', onEnter: CategoriesView },
@@ -219,7 +214,7 @@ createRouter([
   { path:'/acerca', onEnter: AboutView }
 ]);
 
-// Búsqueda
+// --------------------- BÚSQUEDA NAV ---------------------
 const form = document.getElementById('searchForm');
 const input = document.getElementById('searchInput');
 
@@ -231,7 +226,7 @@ form?.addEventListener('submit', (e)=>{
   input.value = '';
 });
 
-// Nav activo
+// --------------------- NAV ACTIVO ---------------------
 function updateActiveNav() {
   const hash = location.hash || '#/';
   document.querySelectorAll('[data-nav]').forEach(a => {
