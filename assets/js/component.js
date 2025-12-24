@@ -20,19 +20,17 @@ const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 async function HomeView() {
   const db = await loadDB();
 
-  // 1) Construir categorías con conteo
+  // Categorías con conteo
   const cats = db.categories.map(c => ({
     ...c,
     count: db.breads.filter(b => b.category === c.name).length
   }));
 
-  // 2) Seleccionar solo las "featured"
+  // Categorías destacadas
   let featuredCats = cats.filter(c => c.featured);
-
-  // 3) Ordenar por número de panes (descendente)
   featuredCats.sort((a, b) => b.count - a.count);
 
-  // 4) Render de la cabecera/hero
+  // Render cabecera
   $app.innerHTML = `
     <section class="hero">
       <div class="card">
@@ -50,29 +48,18 @@ async function HomeView() {
     </section>
   `;
 
-  // 5) Bloque de categorías destacadas (solo featured)
+  // Categorías destacadas
   $app.innerHTML += ui.Section("Categorías destacadas",
-    `<div class="grid">
-      ${featuredCats.map(ui.CategoryCard).join('')}
-    </div>`
+    `<div class="grid">${featuredCats.map(ui.CategoryCard).join('')}</div>`
   );
 
-  // 6) Últimos panes añadidos (filtrados solo a categorías featured)
-  const featuredCategoryNames = new Set(featuredCats.map(c => c.name));
-  const latestFeatured = db.breads
-    .filter(b => featuredCategoryNames.has(b.category))
-    .slice(-8)          // últimos 8
-    .reverse();         // recientes primero
-
-  await hydrateCovers(latestFeatured, 8); // mantiene portadas y limita fetch
-
-  // 7) Render de la colección de panes en el HOME
-  $app.innerHTML += ui.Section(
-    "Recetas destacadas",
-    `<div class="grid">
-      ${latestFeatured.map(ui.BreadCard).join('')}
-    </div>`
+  // Últimas recetas - ahora se muestran todas automáticamente
+  $app.innerHTML += ui.Section("Últimas recetas",
+    `<div class="grid">${db.breads.map(ui.BreadCard).join('')}</div>`
   );
+
+  // Hydrate covers para imágenes
+  await hydrateCovers(db.breads, db.breads.length);
 }
 
 async function CategoriesView() {
@@ -154,20 +141,18 @@ async function BreadView({ slug }) {
     if (!res.ok) throw new Error(`No se pudo cargar ${bread.md}`);
     let raw = await res.text();
 
+    // Embed de videos
     raw = raw.replace(/^\s*(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_\-]+)[^\s]*)\s*$/gmi,
       (_, url, id) => `<div class="md-video"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen loading="lazy"></iframe></div>`);
     raw = raw.replace(/^\s*(https?:\/\/youtu\.be\/([A-Za-z0-9_\-]+)[^\s]*)\s*$/gmi,
       (_, url, id) => `<div class="md-video"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen loading="lazy"></iframe></div>`);
-
     raw = raw.replace(/^\s*(https?:\/\/(?:www\.)?vimeo\.com\/(\d+)[^\s]*)\s*$/gmi,
       (_, url, id) => `<div class="md-video"><iframe src="https://player.vimeo.com/video/${id}" allowfullscreen loading="lazy"></iframe></div>`);
-
     raw = raw.replace(/^\s*(https?:\/\/[^\s]+?\.(mp4|webm))\s*$/gmi,
       (_, url) => `<video class="md-video-file" controls preload="metadata"><source src="${url}"></video>`);
 
     const html = window.marked.parse(raw);
-    const target = document.getElementById('md');
-    target.innerHTML = html;
+    document.getElementById('md').innerHTML = html;
 
     if (headings.length) {
       const toc = document.getElementById('toc');
@@ -241,11 +226,11 @@ form?.addEventListener('submit', (e)=>{
   e.preventDefault();
   const q = (input?.value || '').trim();
   if (!q) return;
-  SearchView(q);     
+  SearchView(q);
   input.value = '';
-}); 
+});
 
-// nav activo
+// Nav activo
 function updateActiveNav() {
   const hash = location.hash || '#/';
   document.querySelectorAll('[data-nav]').forEach(a => {
