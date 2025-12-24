@@ -53,13 +53,14 @@ async function HomeView() {
     `<div class="grid">${featuredCats.map(ui.CategoryCard).join('')}</div>`
   );
 
-  // Últimas recetas - ahora se muestran todas automáticamente
+  // Últimas 3 recetas añadidas
+  const latestBreads = db.breads.slice(-3).reverse();
   $app.innerHTML += ui.Section("Últimas recetas",
-    `<div class="grid">${db.breads.map(ui.BreadCard).join('')}</div>`
+    `<div class="grid">${latestBreads.map(ui.BreadCard).join('')}</div>`
   );
 
-  // Hydrate covers para imágenes
-  await hydrateCovers(db.breads, db.breads.length);
+  // Hydrate covers para imágenes de estas recetas
+  await hydrateCovers(latestBreads, 3);
 }
 
 async function CategoriesView() {
